@@ -143,6 +143,15 @@ FROM layoffs_staging02
 WHERE total_laid_off IS NULL
 AND percentage_laid_off IS NULL ;
 
+SELECT DISTINCT industry
+FROM layoffs_staging02;
+
+SELECT DISTINCT industry
+FROM layoffs_staging02
+WHERE industry IS NULL 
+OR industry = '';
+
+
 SELECT *
 FROM layoffs_staging02
 WHERE industry IS NULL 
@@ -157,3 +166,58 @@ JOIN layoffs_staging02 t2
 	ON t1.company =t2.company
 WHERE (t1.industry IS NULL OR t1.industry = '')
 AND t2.industry IS NOT NULL;
+
+
+UPDATE layoffs_staging02 t1
+JOIN layoffs_staging02 t2
+	ON t1.company =t2.company
+SET t1.industry = t2.industry
+WHERE t1.industry IS NULL
+AND t2.industry IS NOT NULL 
+;
+
+SELECT * 
+FROM layoffs_staging02
+WHERE total_laid_off IS NULL
+AND percentage_laid_off IS NULL ;
+
+
+
+DELETE 
+FROM layoffs_staging02
+WHERE total_laid_off IS NULL
+AND percentage_laid_off IS NULL ;
+SET SQL_SAFE_UPDATES = 1;
+
+SELECT *
+FROM layoffs_staging02
+WHERE company ='Airbnb';
+
+ALTER TABLE layoffs_staging02
+DROP COLUMN row_num;
+
+SELECT company, LENGTH(company)
+FROM layoffs_staging02
+WHERE company LIKE '%Airbnb%';
+
+SELECT DISTINCT company
+FROM layoffs_staging02
+WHERE company LIKE '%Airbnb%';
+
+UPDATE layoffs_staging02
+SET company = TRIM(company);
+SET SQL_SAFE_UPDATES = 0;
+UPDATE layoffs_staging02
+
+SET industry = 'Travel'
+WHERE company = 'Airbnb';
+SET SQL_SAFE_UPDATES = 1;
+
+SET SQL_SAFE_UPDATES = 0;
+
+UPDATE layoffs_staging02
+SET industry = 'Travel'
+WHERE company = 'Airbnb'
+AND (industry IS NULL OR industry = '');
+SET SQL_SAFE_UPDATES = 1;
+
